@@ -1,6 +1,17 @@
 version: '3.7'
 
 services:
+  database:
+    image: postgres
+    ports:
+      - "5433:5432"
+      #volumes:
+      #- ./pg_data:/var/lib/postgresql/data/pgdata
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+
   service1:
     build:
       context: ./
@@ -13,25 +24,19 @@ services:
       spring_datasource_url: jdbc:postgresql://127.0.0.1:5433/postgres
       spring_datasource_username: postgres
       spring_datasource_password: postgres
+      spring_liquibase_hub_mode: off
       spring_liquibase_enabled: true
+      spring_liquibase_url: jdbc:postgresql://database:5432/postgres
+      spring_liquibase_username: postgres
+      spring_liquibase_password: postgres
       spring_liquibase_change-log: classpath:db/changelog/db.changelog-master.yaml
+      spring_liquibase_defaultSchemaName: public
       jwt_secret_access: qBTmv4oXFFR2GwjexDJ4t6fsIUIUhhXqlktXjXdkcyygs8nPVEwMfo29VDRRepYDVV5IkIxBMzr7OEHXEHd37w==
       jwt_secret_refresh: zL1HB3Pch05Avfynovxrf/kpF9O2m4NCWKJUjEp27s9J2jEG3ifiKCGylaZ8fDeoONSTJP/wAzKawB8F9rOMNg==
 
-  database:
-    image: postgres
-    ports:
-      - "5433:5432"
-      #volumes:
-      #- ./pg_data:/var/lib/postgresql/data/pgdata
-    environment:
-      POSTGRES_DB: postgres
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-
   Liquibase:
     # Image to be pulled from Docker Hub
-    image: liquibase/liquibase:latest #4.9.1
+    image: liquibase/liquibase:4.24.0 #4.9.1
     # Name of the container
     container_name: Liquibase_container
     # Setting depends_on to PostgreSQL container to wait till the service is ready to accept connections
@@ -39,6 +44,6 @@ services:
       - database
     # Volume to add the liquibase collection of scripts
     volumes:
-      - ./src/main/resources/db/changeLog/:/liquibase/changelog/
+      - D:/НЕТОЛОГИЯ/Java-РАЗРАБОТЧИК/11_0_Диплом/CloudStorage/src/main/resources/db/changelog/:/liquibase/changelog/
     # Command to run the liquibase update service
     command: --defaults-file=/liquibase/changelog/liquibase.properties update
