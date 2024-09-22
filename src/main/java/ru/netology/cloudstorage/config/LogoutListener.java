@@ -11,8 +11,7 @@ import java.util.List;
 
 import static ru.netology.cloudstorage.log.Log.log;
 
-// К сожалению не работает
-@Service
+// К сожалению не работаетgi
 @Component
 public class LogoutListener implements ApplicationListener<SessionDestroyedEvent> {
 

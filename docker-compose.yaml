@@ -39,6 +39,6 @@ services:
       - database
     # Volume to add the liquibase collection of scripts
     volumes:
-      - ./database/sql/liquibase/changeLog/:/liquibase/changelog/
+      - ./src/main/resources/db/changeLog/:/liquibase/changelog/
     # Command to run the liquibase update service
     command: --defaults-file=/liquibase/changelog/liquibase.properties update
