@@ -4,11 +4,11 @@ services:
   database: # название сервиса - database
     container_name: database # имя контейнера тоже database
     image: postgres:14.3-alpine
-    #healthcheck: # настройка проверка работоспособности
+      #healthcheck: # настройка проверка работоспособности
       #test: pg_isready #-q -d $$POSTGRES_DB -U $$POSTGRES_USER
       #timeout: 45s
       #interval: 10s
-      #retries: 10
+    #retries: 10
     #restart: always # всегда перезапускайте контейнер
     environment: # установка переменных окружения
       POSTGRES_DB: postgres
@@ -26,8 +26,8 @@ services:
     # Setting depends_on to PostgreSQL container to wait till the service is ready to accept connections
     depends_on:
       - database
-      #database:
-        #condition: service_healthy
+        #database:
+      #condition: service_healthy
     # Volume to add the liquibase collection of scripts
     volumes:
       - ./src/main/resources/db/changelog/:/liquibase/changelog/
