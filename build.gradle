@@ -13,6 +13,14 @@ java {
 	}
 }
 
+//jar {
+	//manifest {
+		//attributes(
+				//'Main-Class': 'ru.netology.cloudstorage.CloudStorageApplication'
+		//)
+	//}
+//}
+
 configurations {
 	compileOnly {
 		extendsFrom annotationProcessor

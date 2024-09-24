@@ -31,8 +31,8 @@ public class AuthController {
         JwtAuthResponseDto authResponse = authService.login(authRequest);
         return ResponseEntity.ok(authResponse);
     }
-    // тест curl.exe curl --json '{"Admin": "admin"}' https://localhost:8080/login
-
+    // тест
+    // curl --json "{\"login\": \"Admin\", \"password\": \"admin\"}" http://localhost:8081/login
 
 
     @GetMapping("/hello")

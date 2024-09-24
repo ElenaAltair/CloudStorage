@@ -1,35 +1,39 @@
 version: '3.7'
 
 services:
-  database:
+  database: # название сервиса - database
+    container_name: database # имя контейнера тоже database
     image: postgres
-    ports:
-      - "5433:5432"
-      #volumes:
-      #- ./pg_data:/var/lib/postgresql/data/pgdata
-    environment:
+    healthcheck: # настройка проверка работоспособности
+      test: pg_isready -q -d $$POSTGRES_DB -U $$POSTGRES_USER
+      timeout: 45s
+      interval: 10s
+      retries: 10
+    restart: always # всегда перезапускайте контейнер
+    environment: # установка переменных окружения
       POSTGRES_DB: postgres
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
+    ports:
+      - "5433:5432"
 
   liquibase:
+    # Имя контейнера
+    container_name: Liquibase_container
     # Image to be pulled from Docker Hub
     image: liquibase/liquibase:4.24.0 #4.9.1
-    # Name of the container
-    container_name: Liquibase_container
-    # Setting depends_on to PostgreSQL container to wait till the service is ready to accept connections
-    depends_on:
-      - database
     # Volume to add the liquibase collection of scripts
     volumes:
       - ./src/main/resources/db/changelog/:/liquibase/changelog/
+    # Setting depends_on to PostgreSQL container to wait till the service is ready to accept connections
+    depends_on:
+      - database
     # Command to run the liquibase update service
     command: liquibase --url="jdbc:postgresql://database:5432/postgres" --changeLogFile=./changelog/db.changelog-master.yaml --username=postgres --password=postgres --defaults-file=/liquibase/changelog/liquibase.properties  update
     #command: --defaults-file=/liquibase/changelog/liquibase.properties update
 
   service1:
-    build:
-      context: .
+    build: ./
     image: "mycloudstorage:1.0"
     ports:
       - "8081:8080"
@@ -45,4 +49,5 @@ services:
       spring_liquibase_password: postgres
       spring_liquibase_change-log: classpath:db/changelog/db.changelog-master.yaml
       jwt_secret_access: qBTmv4oXFFR2GwjexDJ4t6fsIUIUhhXqlktXjXdkcyygs8nPVEwMfo29VDRRepYDVV5IkIxBMzr7OEHXEHd37w==
-      
+      jwt_secret_refresh: zL1HB3Pch05Avfynovxrf/kpF9O2m4NCWKJUjEp27s9J2jEG3ifiKCGylaZ8fDeoONSTJP/wAzKawB8F9rOMNg==
+    restart: always
