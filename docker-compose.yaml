@@ -1,25 +1,33 @@
 version: '3.7'
 
 services:
-  database:
-    image: postgres
-    ports:
-      - "5433:5432"
-      #volumes:
-      #- ./pg_data:/var/lib/postgresql/data/pgdata
-    environment:
+  database: # название сервиса - database
+    container_name: database # имя контейнера тоже database
+    image: postgres:14.3-alpine
+    #healthcheck: # настройка проверка работоспособности
+      #test: pg_isready #-q -d $$POSTGRES_DB -U $$POSTGRES_USER
+      #timeout: 45s
+      #interval: 10s
+      #retries: 10
+    #restart: always # всегда перезапускайте контейнер
+    environment: # установка переменных окружения
       POSTGRES_DB: postgres
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+
 
   liquibase:
+    # Name of the container
+    container_name: liquibase
     # Image to be pulled from Docker Hub
     image: liquibase/liquibase:4.24.0 #4.9.1
-    # Name of the container
-    container_name: Liquibase_container
     # Setting depends_on to PostgreSQL container to wait till the service is ready to accept connections
     depends_on:
       - database
+      #database:
+        #condition: service_healthy
     # Volume to add the liquibase collection of scripts
     volumes:
       - ./src/main/resources/db/changelog/:/liquibase/changelog/
@@ -27,22 +35,23 @@ services:
     command: liquibase --url="jdbc:postgresql://database:5432/postgres" --changeLogFile=./changelog/db.changelog-master.yaml --username=postgres --password=postgres --defaults-file=/liquibase/changelog/liquibase.properties  update
     #command: --defaults-file=/liquibase/changelog/liquibase.properties update
 
+
   service1:
-    build:
-      context: .
+    build: ./
+    container_name: cloud_storage
     image: "mycloudstorage:1.0"
     ports:
-      - "8081:8080"
+      - "8081:8081"
     depends_on:
       - liquibase
     environment:
-      spring_datasource_url: jdbc:postgresql://127.0.0.1:5433/postgres
-      spring_datasource_username: postgres
-      spring_datasource_password: postgres
-      spring_liquibase_enabled: true
-      spring_liquibase_url: jdbc:postgresql://database:5432/postgres
-      spring_liquibase_username: postgres
-      spring_liquibase_password: postgres
-      spring_liquibase_change-log: classpath:db/changelog/db.changelog-master.yaml
-      jwt_secret_access: qBTmv4oXFFR2GwjexDJ4t6fsIUIUhhXqlktXjXdkcyygs8nPVEwMfo29VDRRepYDVV5IkIxBMzr7OEHXEHd37w==
-      
+      spring_datasource_url: jdbc:postgresql://database:5432/postgres?&useSSL=false&amp;serverTimezone=UTC
+      #spring_datasource_username: postgres
+      #spring_datasource_password: postgres
+      #spring_liquibase_enabled: true
+      #spring_liquibase_url: jdbc:postgresql://database:5432/postgres
+      #spring_liquibase_username: postgres
+      #spring_liquibase_password: postgres
+      #spring_liquibase_change-log: classpath:db/changelog/db.changelog-master.yaml
+      #spring_datasource_url: jdbc:postgresql://database:5432/postgres?&useSSL=false&amp;serverTimezone=UTC
+      #jwt_secret_access: qBTmv4oXFFR2GwjexDJ4t6fsIUIUhhXqlktXjXdkcyygs8nPVEwMfo29VDRRepYDVV5IkIxBMzr7OEHXEHd37w==
