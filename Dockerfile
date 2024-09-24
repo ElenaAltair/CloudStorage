@@ -11,4 +11,5 @@ COPY build/libs/CloudStorage-0.0.1-SNAPSHOT.jar app.jar
 #ADD src/main/resources/db/changelog/migrations/004-schema.sql src/main/resources/db/changelog/migrations/004-schema.sql
 #ADD src/main/resources/db/changelog/migrations/005-schema.sql src/main/resources/db/changelog/migrations/005-schema.sql
 
-ENTRYPOINT ["java", "-jar", "app.jar"]
+#ENTRYPOINT ["java", "-jar", "app.jar"]
+CMD ["java", "-jar", "app.jar"]

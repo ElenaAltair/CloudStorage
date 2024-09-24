@@ -3,7 +3,7 @@ version: '3.7'
 services:
   database: # название сервиса - database
     container_name: database # имя контейнера тоже database
-    image: postgres
+    image: postgres:14.3-alpine
     healthcheck: # настройка проверка работоспособности
       test: pg_isready -q -d $$POSTGRES_DB -U $$POSTGRES_USER
       timeout: 45s
@@ -43,11 +43,11 @@ services:
       spring_datasource_url: jdbc:postgresql://127.0.0.1:5433/postgres
       spring_datasource_username: postgres
       spring_datasource_password: postgres
-      spring_liquibase_enabled: true
-      spring_liquibase_url: jdbc:postgresql://database:5432/postgres
-      spring_liquibase_username: postgres
-      spring_liquibase_password: postgres
-      spring_liquibase_change-log: classpath:db/changelog/db.changelog-master.yaml
-      jwt_secret_access: qBTmv4oXFFR2GwjexDJ4t6fsIUIUhhXqlktXjXdkcyygs8nPVEwMfo29VDRRepYDVV5IkIxBMzr7OEHXEHd37w==
-      jwt_secret_refresh: zL1HB3Pch05Avfynovxrf/kpF9O2m4NCWKJUjEp27s9J2jEG3ifiKCGylaZ8fDeoONSTJP/wAzKawB8F9rOMNg==
-    restart: always
+      #spring_liquibase_enabled: true
+      #spring_liquibase_url: jdbc:postgresql://database:5432/postgres
+      #spring_liquibase_username: postgres
+      #spring_liquibase_password: postgres
+      #spring_liquibase_change-log: classpath:db/changelog/db.changelog-master.yaml
+      #jwt_secret_access: qBTmv4oXFFR2GwjexDJ4t6fsIUIUhhXqlktXjXdkcyygs8nPVEwMfo29VDRRepYDVV5IkIxBMzr7OEHXEHd37w==
+      #jwt_secret_refresh: zL1HB3Pch05Avfynovxrf/kpF9O2m4NCWKJUjEp27s9J2jEG3ifiKCGylaZ8fDeoONSTJP/wAzKawB8F9rOMNg==
+    #restart: always
