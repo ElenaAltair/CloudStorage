@@ -11,6 +11,4 @@ ADD src/main/resources/application.properties src/main/resources/application.pro
 #ADD src/main/resources/db/changelog/migrations/004-schema.sql src/main/resources/db/changelog/migrations/004-schema.sql
 #ADD src/main/resources/db/changelog/migrations/005-schema.sql src/main/resources/db/changelog/migrations/005-schema.sql
 
-
-#ENTRYPOINT ["java", "-cp", "app.jar", "ru.netology.cloudstorage.CloudStorageApplication"]
 ENTRYPOINT ["java", "-jar", "app.jar"]
