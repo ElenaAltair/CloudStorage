@@ -17,4 +17,4 @@
 В проекте используется СУБД Postgresql
 
 Схема базы данных:
-![alt text](db.png "Database")
+![db.png](db.png)
